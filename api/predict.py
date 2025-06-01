@@ -1,25 +1,34 @@
 # api/predict.py
+
+from http.server import BaseHTTPRequestHandler
 import json
 
-def handler(request, response):
-    try:
-        data = request.json()
+class handler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length)
+        data = json.loads(post_data)
 
         savings = int(data.get("savings", 0))
         goal = data.get("goal", "").lower()
         scheme = data.get("scheme", "").lower()
 
-        # Basic example logic
         if savings >= 500000:
             color = "green"
-            tip = "You are well on track!"
-        elif 200000 <= savings < 500000:
+            tip = "You're financially ready."
+        elif savings >= 200000:
             color = "orange"
-            tip = "Consider increasing your savings."
+            tip = "You may need to save more."
         else:
             color = "red"
-            tip = "High risk. Choose safer schemes or save more."
+            tip = "Savings too low for this goal."
 
-        return response.json({"color": color, "tip": tip})
-    except Exception as e:
-        return response.json({"error": str(e)}, status=400)
+        response = {
+            "color": color,
+            "tip": tip
+        }
+
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+        self.wfile.write(json.dumps(response).encode())
