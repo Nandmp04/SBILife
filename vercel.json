@@ -9,7 +9,7 @@
     {
       "src": "/api/predict",
       "methods": ["POST"],
-      "dest": "/api/predict.py"
+      "dest": "api/predict.py"
     }
   ]
 }
