@@ -1,15 +1,10 @@
 {
   "version": 2,
-  "functions": {
-    "api/predict.py": {
-      "runtime": "python3.9"
-    }
-  },
   "routes": [
     {
       "src": "/api/predict",
       "methods": ["POST"],
-      "dest": "api/predict.py"
+      "dest": "/api/predict.py"
     }
   ]
 }
